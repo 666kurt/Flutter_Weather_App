@@ -28,6 +28,8 @@ flutter:
         weight: 600
       - asset: assets/Poppins/Poppins-Regular.ttf
         weight: 400
+  assets:
+    - assets/images/
 
 
 
