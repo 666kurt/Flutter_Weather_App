@@ -11,8 +11,10 @@ class WeatherScreen extends StatefulWidget {
 class _WeatherScreenState extends State<WeatherScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: WeatherCard(),
+    return const Scaffold(
+      body: Center(
+        child: WeatherCard(),
+      ),
     );
   }
 }

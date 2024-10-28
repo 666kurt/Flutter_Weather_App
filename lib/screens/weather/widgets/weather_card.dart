@@ -21,17 +21,20 @@ class _WeatherCardState extends State<WeatherCard> {
         color: AppColors.cardColor,
         borderRadius: BorderRadius.circular(35),
       ),
-      child: const Column(
+      child: Column(
         children: [
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text("Today", style: AppFonts.headline),
               SizedBox(width: 10),
-              Icon(Icons.keyboard_arrow_down_outlined),
+              Icon(
+                Icons.keyboard_arrow_down_outlined,
+                color: AppColors.cardTextColor,
+              ),
             ],
           ),
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
@@ -43,6 +46,29 @@ class _WeatherCardState extends State<WeatherCard> {
               Text("32°", style: AppFonts.headlineLarge),
             ],
           ),
+          const Text("Sunny", style: AppFonts.bodySemiBold),
+          const SizedBox(height: 15),
+          const Text("California, Los Angeles", style: AppFonts.bodyMedium),
+          const SizedBox(height: 15),
+          const Text("21 Oct 2019", style: AppFonts.bodyMedium),
+          const SizedBox(height: 15),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text("Feels like 30", style: AppFonts.bodyMedium),
+              const SizedBox(width: 10),
+              Container(
+                width: 1,
+                height: 15,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: AppColors.cardTextColor,
+                ),
+              ),
+              const SizedBox(width: 10),
+              const Text("Sunset 18:20", style: AppFonts.bodyMedium),
+            ],
+          )
         ],
       ),
     );
