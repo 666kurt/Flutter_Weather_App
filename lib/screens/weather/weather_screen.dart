@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:weather_app/services/network_service.dart';
+import '../../models/weather.dart';
 import 'widgets/weather_card.dart';
 
 class WeatherScreen extends StatefulWidget {
@@ -10,6 +11,15 @@ class WeatherScreen extends StatefulWidget {
 }
 
 class _WeatherScreenState extends State<WeatherScreen> {
+  late Future<WeatherData> _weatherData;
+  final NetworkService _networkService = NetworkService();
+
+  @override
+  void initState() {
+    super.initState();
+    _weatherData = _networkService.fetchData(54.32, 48.38);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,16 +35,49 @@ class _WeatherScreenState extends State<WeatherScreen> {
             ),
           ),
           // Main content
-          const SafeArea(
-            minimum: EdgeInsets.symmetric(horizontal: 30),
-            child: Column(
-              children: [
-                WeatherCard(),
-              ],
-            ),
+          FutureBuilder(
+            future: _weatherData,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return const Center(child: Text("There is error!"));
+              } else if (!snapshot.hasData) {
+                return const Center(child: Text("There is has no data!"));
+              } else {
+                final WeatherData weather = snapshot.requireData;
+                return Center(child: Text("${weather.main.temp}"));
+              }
+            },
           ),
         ],
       ),
     );
   }
 }
+
+
+          // SafeArea(
+          //   minimum: const EdgeInsets.symmetric(horizontal: 30),
+          //   child: Column(
+          //     children: [
+          //       const WeatherCard(),
+          //       const SizedBox(height: 20),
+          //       Container(
+          //         width: double.infinity,
+          //         height: 200,
+          //         decoration: BoxDecoration(
+          //           borderRadius: BorderRadius.circular(30),
+          //           gradient: LinearGradient(
+          //             begin: Alignment.topLeft,
+          //             end: Alignment.bottomRight,
+          //             colors: [
+          //               const Color(0xFF7FC3AE).withOpacity(0.8),
+          //               const Color(0xFF7FC3AE).withOpacity(0.6),
+          //             ],
+          //           ),
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
