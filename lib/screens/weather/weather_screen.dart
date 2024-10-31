@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weather_app/screens/weather/widgets/weather_info.dart';
 import 'package:weather_app/services/network_service.dart';
 import '../../models/weather.dart';
 import 'widgets/weather_card.dart';
@@ -46,7 +47,16 @@ class _WeatherScreenState extends State<WeatherScreen> {
                 return const Center(child: Text("There is has no data!"));
               } else {
                 final WeatherData weather = snapshot.requireData;
-                return Center(child: Text("${weather.main.temp}"));
+                return SafeArea(
+                  minimum: const EdgeInsets.symmetric(horizontal: 30),
+                  child: Column(
+                    children: [
+                      WeatherCard(weatherData: weather),
+                      const SizedBox(height: 20),
+                      const WeatherInfo(),
+                    ],
+                  ),
+                );
               }
             },
           ),
@@ -55,29 +65,3 @@ class _WeatherScreenState extends State<WeatherScreen> {
     );
   }
 }
-
-
-          // SafeArea(
-          //   minimum: const EdgeInsets.symmetric(horizontal: 30),
-          //   child: Column(
-          //     children: [
-          //       const WeatherCard(),
-          //       const SizedBox(height: 20),
-          //       Container(
-          //         width: double.infinity,
-          //         height: 200,
-          //         decoration: BoxDecoration(
-          //           borderRadius: BorderRadius.circular(30),
-          //           gradient: LinearGradient(
-          //             begin: Alignment.topLeft,
-          //             end: Alignment.bottomRight,
-          //             colors: [
-          //               const Color(0xFF7FC3AE).withOpacity(0.8),
-          //               const Color(0xFF7FC3AE).withOpacity(0.6),
-          //             ],
-          //           ),
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // ),

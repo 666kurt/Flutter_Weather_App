@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:weather_app/models/weather.dart';
 import '../../../theme/theme.dart';
 
 class WeatherCard extends StatefulWidget {
   const WeatherCard({
     super.key,
+    required this.weatherData,
   });
+
+  final WeatherData weatherData;
 
   @override
   State<WeatherCard> createState() => _WeatherCardState();
@@ -54,30 +58,34 @@ class _WeatherCardState extends State<WeatherCard> {
   }
 
   Widget _getContent() {
+    final WeatherData weather = widget.weatherData;
+    final DateTime dateTime =
+        DateTime.fromMillisecondsSinceEpoch(weather.dt * 1000);
     return Column(
       children: [
-        const Row(
+        Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
+            const Icon(
               Icons.sunny,
               size: 72,
               color: AppColors.cardTextColor,
             ),
-            SizedBox(width: 20),
-            Text("32°", style: AppFonts.headlineLarge),
+            const SizedBox(width: 20),
+            Text("${weather.main.temp.ceil()}°", style: AppFonts.headlineLarge),
           ],
         ),
-        const Text("Sunny", style: AppFonts.bodySemiBold),
+        Text(weather.weather[0].main, style: AppFonts.bodySemiBold),
         const SizedBox(height: 15),
-        const Text("California, Los Angeles", style: AppFonts.bodyMedium),
+        Text(weather.name, style: AppFonts.bodyMedium),
         const SizedBox(height: 15),
-        const Text("21 Oct 2019", style: AppFonts.bodyMedium),
+        Text(dateTime.toString(), style: AppFonts.bodyMedium),
         const SizedBox(height: 15),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text("Feels like 30", style: AppFonts.bodyMedium),
+            Text("Feels like ${weather.main.feelsLike.ceil()}",
+                style: AppFonts.bodyMedium),
             const SizedBox(width: 10),
             Container(
               width: 1,
@@ -88,7 +96,8 @@ class _WeatherCardState extends State<WeatherCard> {
               ),
             ),
             const SizedBox(width: 10),
-            const Text("Sunset 18:20", style: AppFonts.bodyMedium),
+            Text("Min. temp ${weather.main.tempMin.ceil()}",
+                style: AppFonts.bodyMedium),
           ],
         )
       ],
