@@ -1,25 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:weather_app/screens/weather/bloc/weather_bloc.dart';
+import 'package:weather_app/screens/weather/bloc/weather_state.dart';
 import 'package:weather_app/screens/weather/widgets/weather_info.dart';
-import 'package:weather_app/services/network_service.dart';
-import '../../models/weather.dart';
 import 'widgets/weather_card.dart';
 
-class WeatherScreen extends StatefulWidget {
+class WeatherScreen extends StatelessWidget {
   const WeatherScreen({super.key});
-
-  @override
-  State<WeatherScreen> createState() => _WeatherScreenState();
-}
-
-class _WeatherScreenState extends State<WeatherScreen> {
-  late Future<WeatherData> _weatherData;
-  final NetworkService _networkService = NetworkService();
-
-  @override
-  void initState() {
-    super.initState();
-    _weatherData = _networkService.fetchData(54.32, 48.38);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,30 +23,28 @@ class _WeatherScreenState extends State<WeatherScreen> {
             ),
           ),
           // Main content
-          FutureBuilder(
-            future: _weatherData,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
+          BlocBuilder<WeatherBloc, WeatherState>(
+            builder: (context, state) {
+              if (state is WeatherLoadingState) {
                 return const Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return const Center(child: Text("There is error!"));
-              } else if (!snapshot.hasData) {
-                return const Center(child: Text("There is has no data!"));
-              } else {
-                final WeatherData weather = snapshot.requireData;
+              } else if (state is WeatherErrorState) {
+                return Center(child: Text(state.error));
+              } else if (state is WeatherLoadedState) {
                 return SafeArea(
                   minimum: const EdgeInsets.symmetric(horizontal: 30),
                   child: Column(
                     children: [
-                      WeatherCard(weatherData: weather),
+                      WeatherCard(weatherData: state.weatherData),
                       const SizedBox(height: 20),
                       const WeatherInfo(),
                     ],
                   ),
                 );
+              } else {
+                return const Center(child: Text("No data"));
               }
             },
-          ),
+          )
         ],
       ),
     );
